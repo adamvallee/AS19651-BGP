@@ -78,42 +78,61 @@ protocol bgp RS1_AS57369_v6 from peer6 {
   };
 }
 
-
-protocol bgp RS2_AS57369_v4 from peer4 {
+# Define the BGP protocol
+protocol bgp RS2_AS57369_v4 {
+  # The name of the BGP session
+  name "BGP to Route Server 2";
   description "Onix v4";
+  # The local IP address and ASN
   local 149.112.50.84 as 19651;
-  source address 149.112.50.84;
+  # The neighbor IP address and ASN
   neighbor 149.112.50.2 as 57369;
   multihop;
-  ipv4 {
-    export filter {
-      add_as_specific_prepends(19651);
-      handle_as_specific_no_export(57369);
-      peer_export();
-    };
-  };
+  # Import all routes from the neighbor
+  import all;
+  # Export all routes to the neighbor
+  export all;
 }
 
-protocol bgp RS2_AS57369_v6 from peer6 {
+#  ipv4 {
+#    export filter {
+#      add_as_specific_prepends(19651);
+#      handle_as_specific_no_export(57369);
+#      peer_export();
+#    };
+#  };
+
+
+# Define the BGP protocol
+protocol bgp RS2_AS57369_v6 {
+  # The name of the BGP session
+  name "BGP to Route Server 2";
   description "Onix v6";
+  # The local IP address and ASN
   local 2001:504:125:e1::84 as 19651;
-  neighbor 2001:504:125:e1::2 as 57369 external;
-  source address 2001:504:125:e1::84;
+  # The neighbor IP address and ASN
+  neighbor 2001:504:125:e1::2 as 57369;
   multihop;
-  ipv6 {
-    export filter {
-      add_as_specific_prepends(19651);
-      handle_as_specific_no_export(57369);
-      peer_export();
-    };
-  };
+  # Import all routes from the neighbor
+  import all;
+  # Export all routes to the neighbor
+  export all;
 }
+
+#  ipv6 {
+#    export filter {
+#      add_as_specific_prepends(19651);
+#      handle_as_specific_no_export(57369);
+#      peer_export();
+#    };
+#  };
+
 
 ###############################################################################################
 # Connection to AS21700 Core Router Provides UPSTREAM
 # https://app.neptunenetworks.org/transit
 #
-
+/*
  protocol bgp R1_LGA1_AS19651_v4 from core4 {
   description "R1 LGA1 Core Router";
   local 10.123.48.68 as OUR_ASN;
@@ -133,12 +152,12 @@ protocol bgp R1_LGA1_AS19651_v6 from core6 {
   direct;
   rr client;
 }
-
+*/
 ###############################################################################################
 # Connection to Core Router on AS20473 - VULTR
 # Using ZeroTier
 #
-
+/*
  protocol bgp yyz_r1_as20473_v4 from core4 {
  description "Vultr Core Router";
   local 10.123.48.68 as OUR_ASN;
@@ -158,12 +177,12 @@ protocol bgp yyz_r1_as20473_v6 from core6 {
   direct;
   rr client;
 }
-
+*/
 ###############################################################################################
 # Connection to YYZ02-VALLEE Core Router
 # Using ZeroTier
 #
-
+/*
  protocol bgp YYZ02_VALLEE_v4 from core4 {
   description "YYZ02 VALLEE Core Router";
   local 10.123.48.68 as OUR_ASN;
@@ -179,3 +198,4 @@ protocol bgp yyz_r1_as20473_v6 from core6 {
   neighbor fc1d:aa33:e2d3:4017:b26f::1 as 65003;
   multihop;
  }
+*/
