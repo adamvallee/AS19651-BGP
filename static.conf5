@@ -1,0 +1,27 @@
+protocol static {
+	ipv4;
+	check link;
+	route 10.123.0.0/16 via "ztmvfsvae2";
+	route 23.134.89.0/24 via "eth0";
+	route 23.134.89.0/24 via 23.134.89.1;
+	route 149.112.50.0/24 via "ens19";
+	route 127.0.0.0/8 via "lo";
+#  route 198.51.100.0/24 unreachable;
+}
+
+protocol static {
+	ipv6;
+	route 2602:f9ec:f0a::/48 via 23.134.89.18;
+	route 2602:fba1:d00::/40 via "eth0";
+	route 2001:504:125:e1::/64 via "ens19";
+	route fc1d:aa33:e200::/40 via "ztmvfsvae2";
+	route ::1/128 via "lo";
+#  route 2602:f9ec:f0::/44 via 155.138.132.9;
+#  route 2602:f9ec:f0::/44 via 2001:19f0:b002:101c:5400:04ff:fea5:b71e;
+#   route 2602:f9ec:fd::/48 via 23.134.89.18;
+#   route 2602:f9ec:fd::/48 via 2602:fba1:d00::18:1;
+#  route 2602:f9ec:f0::/36 via 
+}
+
+# vim: set ft=bird nofoldenable:
+

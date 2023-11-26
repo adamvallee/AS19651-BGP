@@ -1,0 +1,160 @@
+
+# --- Templates ---
+template bgp peer4 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv4 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where peer_import();
+    export where peer_export();
+  };
+}
+
+template bgp peer6 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv6 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where peer_import();
+    export where peer_export();
+  };
+}
+
+template bgp customer4 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv4 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where customer_import();
+    export where customer_export();
+  };
+}
+
+template bgp customer6 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv6 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where customer_import();
+    export where customer_export();
+  };
+}
+
+template bgp core4 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv4 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where core_import();
+    export where core_export();
+  };
+}
+
+template bgp core6 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv6 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where core_import();
+    export where core_export();
+  };
+}
+
+template bgp upstream4 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv4 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where upstream_import();
+    export where upstream_export();
+  };
+}
+
+template bgp upstream6 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv6 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import where upstream_import();
+    export where upstream_export();
+  };
+}
+
+template bgp lookingglass4 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv4 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import filter { reject; };
+    export where customer_export();
+  };
+}
+
+template bgp lookingglass6 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+
+  ipv6 {
+    next hop self ebgp;
+
+    import keep filtered;
+    import filter { reject; };
+    export where customer_export();
+  };
+}
+
+template bgp telemetry4 {
+  hold time 90;
+  keepalive time 30;
+  graceful restart;
+  rr client;
+
+  ipv4 {
+    next hop self ebgp;
+    import filter { reject; };
+    export filter { accept; };
+  };
+
+  ipv6 {
+    next hop address 127.0.0.1;
+    import filter { reject; };
+    export filter { accept; };
+  };
+}

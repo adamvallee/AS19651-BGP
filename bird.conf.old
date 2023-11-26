@@ -1,0 +1,114 @@
+# Configure logging
+#log syslog all;
+# Set router ID. It is a unique identification of your router, usually one of
+# IPv4 addresses of the router. It is recommended to configure it explicitly.
+# THIS IS 23.134.89.18 or 2602:fba1:d00::18:1/40
+# AKA onix-1c1g-bgp.as19651.net
+# Hosted on https://control.cloudie.io/vm/ca-1220
+#
+
+router id 23.134.89.18;
+
+define my_asn = 19651;
+
+filter noroutes {
+  reject;
+}
+
+filter allroutes {
+  accept;
+}
+
+filter bgp_out {
+        if (net = 2602:f9ec:f0::/44 ) &&
+                (source = RTS_DEVICE) then accept;
+        else reject;
+}
+
+protocol bgp yyz_r1_as20473_v4 {
+    local 23.134.89.18 as 4200000924;
+    source address 23.134.89.18;
+    graceful restart on;
+	multihop;
+    neighbor 155.138.132.9 as 4200020473;
+    ipv4 {
+        import filter allroutes;
+        export filter allroutes;
+         };
+};
+
+protocol bgp yyz_r1_as20473_v6 {
+	local 2602:fba1:d00::18:1 as 4200000924;
+	source address 2602:fba1:d00::18:1;
+	graceful restart on;
+	multihop;
+	neighbor 2001:19f0:b002:101c:5400:04ff:fea5:b71e as 4200020473;
+	ipv6 {
+		import filter allroutes;
+		export filter allroutes;
+	};
+};
+
+
+protocol bgp Cloudie_v4 {
+    local as my_asn;
+    source address 23.134.89.18;
+    graceful restart on;
+    neighbor 23.134.89.1 as 924 external;
+    ipv4 {
+        import filter allroutes;
+        export filter allroutes;
+         };
+};
+
+protocol bgp Cloudie_v6 {
+    local as my_asn;
+    source address 2602:fba1:d00::18:1;
+    graceful restart on;
+    neighbor 2602:fba1:d00::1 as 924 external;
+    ipv6 {
+        import filter allroutes;
+        export filter allroutes;
+         };
+};
+
+
+protocol device {
+    scan time 5;
+}
+protocol direct {
+        disabled;               # Disable by default
+        ipv4;                   # Connect to default IPv4 table
+        ipv6;                   # ... and to default IPv6 table
+#        interface "dummy*";
+}
+protocol kernel {
+        ipv4 {                  # Connect protocol to IPv4 table by channel
+              import filter allroutes;  # Import to table, default is import all
+              export filter allroutes;  # Export to protocol. default is export none
+        };
+}
+protocol kernel {
+        ipv6 {
+                import filter allroutes;
+                export filter allroutes;
+        };
+       learn;                  # Learn alien routes from the kernel
+       kernel table 10;        # Kernel table to synchronize with (default: main)
+}
+protocol static {
+        ipv6;
+#        route 2602:f9ec:f0::/44 via 23.134.89.18;
+#        route 2602:f9ec:f0::/44 via 2602:fba1:d00::18:1;
+#        route ::/0 via 2001:19f0:b002:101c:5400:04ff:fea5:b71e;
+#       route 0.0.0.0/0 via 198.51.100.10;
+#       route 192.0.2.0/24 blackhole;
+#       route 10.0.0.0/8 unreachable;
+#       route 10.2.0.0/24 via "eth0";
+#       # Static routes can be defined with optional attributes
+#       route 10.1.1.0/24 via 198.51.100.3 { rip_metric = 3; };
+#       route 10.1.2.0/24 via 198.51.100.3 { ospf_metric1 = 100; };
+#       route 10.1.3.0/24 via 198.51.100.4 { ospf_metric2 = 100; };
+}
+
+

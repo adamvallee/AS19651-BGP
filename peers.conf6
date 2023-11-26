@@ -1,0 +1,177 @@
+define OUR_ASN = 19651;
+
+###############################################################################################
+# Connection to UPSTREAM AS924
+#
+# protocol bgp UPSTREAM_AS924_v4 from upstream4 {
+#  description "Cloudie Networks LLC";
+#  local 23.134.89.18 as OUR_ASN;
+#  neighbor 23.134.89.1 as 924;
+#  source address 23.134.89.18;
+#  multihop;
+#  ipv4 {
+#    export filter {
+#      add_as_specific_prepends(OUR_ASN);
+#      handle_as_specific_no_export(924);
+#      upstream_export();
+#    };
+#  };
+# }
+
+ protocol bgp UPSTREAM_AS924_v6 from upstream6 {
+  description "Cloudie Networks LLC";
+  local 2602:fba1:d00::18:1 as OUR_ASN;
+  source address 2602:fba1:d00::18:1;
+  neighbor 2602:fba1:d00::1 as 924 external;
+  ipv6 {
+    export filter {
+      add_as_specific_prepends(OUR_ASN);
+      handle_as_specific_no_export(924);
+      upstream_export();
+    };
+  };
+ }
+
+###############################################################################################
+# Connection to ONIX-IXP Core Router
+# 
+# My Side
+# IPv6 Address:  2001:504:125:e1::84/64
+# IPv6 Hostname: the-trusty-ledger.as19651.ip6.onix.cx
+# IPv4 Address:  149.112.50.84/24
+# IPv4 Hostname: the-trusty-ledger.as19651.ip.onix.cx
+# Onix Side
+# ASN: 57369
+# IPv4 Address:  149.112.50.1/24
+# IPv6 Address:  2001:504:125:e1::1/64
+# IPv4 Address:  149.112.50.2/24
+# IPv6 Address:  2001:504:125:e1::2/64
+
+#protocol bgp RS1_AS57369_v4 from peer4 {
+#  description "Onix v4";
+#  local 149.112.50.84 as 19651;
+#  source address 149.112.50.84;
+#  neighbor 149.112.50.1 as 57369;
+#  multihop;
+#  ipv4 {
+#    export filter {
+#      add_as_specific_prepends(19651);
+#      handle_as_specific_no_export(57369);
+#      peer_export();
+#    };
+#  };
+#}
+
+protocol bgp RS1_AS57369_v6 from peer6 {
+  description "Onix v6";
+  local 2001:504:125:e1::84 as 19651;
+  neighbor 2001:504:125:e1::1 as 57369 external;
+  source address 2001:504:125:e1::84;
+  multihop;
+  ipv6 {
+    export filter {
+      add_as_specific_prepends(19651);
+      handle_as_specific_no_export(57369);
+      peer_export();
+    };
+  };
+}
+
+
+#protocol bgp RS2_AS57369_v4 from peer4 {
+#  description "Onix v4";
+#  local 149.112.50.84 as 19651;
+#  source address 149.112.50.84;
+#  neighbor 149.112.50.2 as 57369;
+#  multihop;
+#  ipv4 {
+#    export filter {
+#      add_as_specific_prepends(19651);
+#      handle_as_specific_no_export(57369);
+#      peer_export();
+#    };
+#  };
+#}
+
+protocol bgp RS2_AS57369_v6 from peer6 {
+  description "Onix v6";
+  local 2001:504:125:e1::84 as 19651;
+  neighbor 2001:504:125:e1::2 as 57369 external;
+  source address 2001:504:125:e1::84;
+  multihop;
+  ipv6 {
+    export filter {
+      add_as_specific_prepends(19651);
+      handle_as_specific_no_export(57369);
+      peer_export();
+    };
+  };
+}
+
+###############################################################################################
+# Connection to AS21700 Core Router Provides UPSTREAM
+# https://app.neptunenetworks.org/transit
+#
+ protocol bgp R1_LGA1_AS19651_v4 from core4 {
+  description "R1 LGA1 Core Router";
+  local 10.123.48.68 as OUR_ASN;
+  source address 10.123.48.68;
+  neighbor 10.123.18.230 as OUR_ASN internal;
+  multihop;
+  direct;
+  rr client;
+ }
+
+protocol bgp R1_LGA1_AS19651_v6 from core6 {
+  description "R1 LGA1 Core Router";
+  local fc1d:aa33:e2ea:7af2:c229::1 as OUR_ASN;
+  source address fc1d:aa33:e2ea:7af2:c229::1;
+  neighbor fc1d:aa33:e237:b569:12e6::1 as OUR_ASN internal;
+  multihop;
+  direct;
+  rr client;
+}
+
+###############################################################################################
+# Connection to Vultr Core Router
+# Using ZeroTier
+#
+# protocol bgp yyz_r1_as20473_v4 from core4 {
+# description "Vultr Core Router";
+#  local 10.123.48.68 as OUR_ASN;
+#  source address 10.123.48.68;
+#  neighbor 10.123.85.248 as OUR_ASN internal;
+#  multihop;
+#  direct;
+#  rr client;
+# }
+
+protocol bgp yyz_r1_as20473_v6 from core6 {
+  description "Vultr Core Router";
+  local fc1d:aa33:e2ea:7af2:c229::1 as OUR_ASN;
+  source address fc1d:aa33:e2ea:7af2:c229::1;
+  neighbor fc1d:aa33:e20e:80f2:55f8::1 as OUR_ASN internal;
+  multihop;
+  direct;
+  rr client;
+}
+
+###############################################################################################
+# Connection to YYZ02-VALLEE Core Router
+# Using ZeroTier
+#
+# protocol bgp YYZ02_VALLEE_v4 from core4 {
+#  description "YYZ02 VALLEE Core Router";
+#  local 10.123.48.68 as OUR_ASN;
+#  source address 10.123.48.68;
+#  neighbor 10.123.114.184 as 65003;
+#  multihop;
+# }
+
+# protocol bgp YYZ02_VALLEE_v6 from core6 {
+#  description "YYZ02-VALLEE Core Router";
+#  local fc1d:aa33:e2ea:7af2:c229::1 as OUR_ASN;
+#  source address fc1d:aa33:e2ea:7af2:c229::1;
+#  neighbor fc1d:aa33:e2d3:4017:b26f::1 as 65003;
+#  multihop;
+# }
